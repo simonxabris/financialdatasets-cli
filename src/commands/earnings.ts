@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli"
 import { Console, Effect } from "effect"
 import { getEarningsPressReleases } from "../api/earnings"
-import { getApiKey } from "./shared"
+import { getApiKey, printSubcommandHelp } from "./shared"
 
 const ticker = Options.text("ticker").pipe(
   Options.withDescription("The ticker symbol."),
@@ -21,6 +21,9 @@ const pressReleases = Command.make(
     })
 )
 
-export const earningsCommand = Command.make("earnings", {}, () => Effect.succeed(undefined)).pipe(
-  Command.withSubcommands([pressReleases])
+const earningsBase = Command.make("earnings", {}, () => Effect.succeed(undefined))
+const earningsWithSubcommands = earningsBase.pipe(Command.withSubcommands([pressReleases]))
+
+export const earningsCommand = earningsWithSubcommands.pipe(
+  Command.withHandler(() => printSubcommandHelp(earningsWithSubcommands))
 )

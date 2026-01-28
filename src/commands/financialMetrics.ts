@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli"
 import { Console, Effect } from "effect"
 import { getFinancialMetrics, getFinancialMetricsSnapshot } from "../api/financialMetrics"
-import { getApiKey } from "./shared"
+import { getApiKey, printSubcommandHelp } from "./shared"
 
 const ticker = Options.text("ticker").pipe(
   Options.withDescription("The ticker symbol of the company."),
@@ -45,8 +45,11 @@ const snapshot = Command.make(
     })
 )
 
-export const financialMetricsCommand = Command.make(
-  "financial-metrics",
-  {},
-  () => Effect.succeed(undefined)
-).pipe(Command.withSubcommands([historical, snapshot]))
+const financialMetricsBase = Command.make("financial-metrics", {}, () => Effect.succeed(undefined))
+const financialMetricsWithSubcommands = financialMetricsBase.pipe(
+  Command.withSubcommands([historical, snapshot])
+)
+
+export const financialMetricsCommand = financialMetricsWithSubcommands.pipe(
+  Command.withHandler(() => printSubcommandHelp(financialMetricsWithSubcommands))
+)

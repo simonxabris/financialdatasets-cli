@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli"
 import { Console, Effect } from "effect"
 import { getHistoricalPrices, getPriceSnapshot } from "../api/prices"
-import { ensureDate, ensureMin, ensureRange, getApiKey } from "./shared"
+import { ensureDate, ensureMin, ensureRange, getApiKey, printSubcommandHelp } from "./shared"
 
 const ticker = Options.text("ticker").pipe(
   Options.withDescription("The ticker symbol."),
@@ -72,6 +72,9 @@ const snapshot = Command.make(
     })
 )
 
-export const pricesCommand = Command.make("prices", {}, () => Effect.succeed(undefined)).pipe(
-  Command.withSubcommands([historical, snapshot])
+const pricesBase = Command.make("prices", {}, () => Effect.succeed(undefined))
+const pricesWithSubcommands = pricesBase.pipe(Command.withSubcommands([historical, snapshot]))
+
+export const pricesCommand = pricesWithSubcommands.pipe(
+  Command.withHandler(() => printSubcommandHelp(pricesWithSubcommands))
 )

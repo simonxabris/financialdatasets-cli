@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli"
 import { Console, Effect } from "effect"
 import { getFilingItems, getFilings } from "../api/filings"
-import { getApiKey } from "./shared"
+import { getApiKey, printSubcommandHelp } from "./shared"
 
 const cik = Options.text("cik").pipe(
   Options.withDescription("The Central Index Key (CIK) of the company."),
@@ -104,6 +104,9 @@ const items = Command.make(
     })
 )
 
-export const filingsCommand = Command.make("filings", {}, () => Effect.succeed(undefined)).pipe(
-  Command.withSubcommands([list, items])
+const filingsBase = Command.make("filings", {}, () => Effect.succeed(undefined))
+const filingsWithSubcommands = filingsBase.pipe(Command.withSubcommands([list, items]))
+
+export const filingsCommand = filingsWithSubcommands.pipe(
+  Command.withHandler(() => printSubcommandHelp(filingsWithSubcommands))
 )

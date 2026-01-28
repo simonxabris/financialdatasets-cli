@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli"
 import { Console, Effect } from "effect"
 import { getCryptoHistoricalPrices, getCryptoPriceSnapshot } from "../api/crypto"
-import { ensureDate, ensureMin, ensureRange, getApiKey } from "./shared"
+import { ensureDate, ensureMin, ensureRange, getApiKey, printSubcommandHelp } from "./shared"
 
 const ticker = Options.text("ticker").pipe(
   Options.withDescription("The cryptocurrency ticker symbol."),
@@ -72,6 +72,9 @@ const snapshot = Command.make(
     })
 )
 
-export const cryptoCommand = Command.make("crypto", {}, () => Effect.succeed(undefined)).pipe(
-  Command.withSubcommands([historical, snapshot])
+const cryptoBase = Command.make("crypto", {}, () => Effect.succeed(undefined))
+const cryptoWithSubcommands = cryptoBase.pipe(Command.withSubcommands([historical, snapshot]))
+
+export const cryptoCommand = cryptoWithSubcommands.pipe(
+  Command.withHandler(() => printSubcommandHelp(cryptoWithSubcommands))
 )

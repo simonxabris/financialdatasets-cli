@@ -6,7 +6,7 @@ import {
   getFinancials,
   getIncomeStatements
 } from "../api/financials"
-import { getApiKey } from "./shared"
+import { getApiKey, printSubcommandHelp } from "./shared"
 
 const ticker = Options.text("ticker").pipe(
   Options.withDescription("The ticker symbol."),
@@ -82,6 +82,11 @@ const cashFlowStatements = Command.make(
     })
 )
 
-export const financialsCommand = Command.make("financials", {}, () => Effect.succeed(undefined)).pipe(
+const financialsBase = Command.make("financials", {}, () => Effect.succeed(undefined))
+const financialsWithSubcommands = financialsBase.pipe(
   Command.withSubcommands([all, incomeStatements, balanceSheets, cashFlowStatements])
+)
+
+export const financialsCommand = financialsWithSubcommands.pipe(
+  Command.withHandler(() => printSubcommandHelp(financialsWithSubcommands))
 )

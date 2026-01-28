@@ -1,4 +1,5 @@
-import { Effect, Option } from "effect"
+import { CliConfig, Command, HelpDoc } from "@effect/cli"
+import { Console, Effect, Option } from "effect"
 import { isApiError } from "../api/client"
 
 const datePattern = /^\d{4}-\d{2}-\d{2}$/
@@ -45,4 +46,13 @@ export const getApiKey = () =>
     }
 
     return value
+  })
+
+export const printSubcommandHelp = <Name extends string, R, E, A>(
+  command: Command.Command<Name, R, E, A>
+) =>
+  Effect.gen(function*() {
+    yield* Console.log("Please use one of the available subcommands:")
+    const help = Command.getHelp(command, CliConfig.defaultConfig)
+    yield* Console.log(HelpDoc.toAnsiText(help).trimEnd())
   })

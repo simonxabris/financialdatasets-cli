@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli"
 import { Console, Effect } from "effect"
 import { getCompanyFacts } from "../api/company"
-import { getApiKey } from "./shared"
+import { getApiKey, printSubcommandHelp } from "./shared"
 
 const ticker = Options.text("ticker").pipe(
   Options.withDescription("The ticker symbol."),
@@ -32,6 +32,9 @@ const facts = Command.make(
     })
 )
 
-export const companyCommand = Command.make("company", {}, () => Effect.succeed(undefined)).pipe(
-  Command.withSubcommands([facts])
+const companyBase = Command.make("company", {}, () => Effect.succeed(undefined))
+const companyWithSubcommands = companyBase.pipe(Command.withSubcommands([facts]))
+
+export const companyCommand = companyWithSubcommands.pipe(
+  Command.withHandler(() => printSubcommandHelp(companyWithSubcommands))
 )
