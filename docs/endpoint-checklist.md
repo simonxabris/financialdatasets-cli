@@ -4,28 +4,27 @@ Source: `fincnacialdatesets-openapi-schema.json`
 
 ## Market Data
 - [x] `GET /prices` (prices historical)
-- [ ] `GET /prices/snapshot`
+- [x] `GET /prices/snapshot`
 - [ ] `GET /options`
 - [ ] `GET /options/chain`
 
 ## Crypto
-- [ ] `GET /crypto/prices`
-- [ ] `GET /crypto/prices/snapshot`
+- [x] `GET /crypto/prices`
+- [x] `GET /crypto/prices/snapshot`
 
 ## Financial Statements
 - [ ] `GET /financials`
 - [ ] `GET /financials/income-statements`
 - [ ] `GET /financials/balance-sheets`
 - [ ] `GET /financials/cash-flow-statements`
-- [ ] `GET /financials/segmented-revenues`
 - [ ] `POST /financials/search`
 - [ ] `POST /financials/search/line-items`
 
 ## Company Information
-- [ ] `GET /company/facts`
+- [x] `GET /company/facts`
 
 ## Earnings
-- [ ] `GET /earnings/press-releases`
+- [x] `GET /earnings/press-releases`
 
 ## News
 - [ ] `GET /news`

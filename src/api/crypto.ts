@@ -1,6 +1,6 @@
 import { requestJson } from "./client"
 
-export type HistoricalPricesParams = {
+export type CryptoHistoricalPricesParams = {
   readonly ticker: string
   readonly interval: "day" | "week" | "month" | "year"
   readonly intervalMultiplier: number
@@ -9,12 +9,12 @@ export type HistoricalPricesParams = {
   readonly limit: number
 }
 
-export type PriceSnapshotParams = {
+export type CryptoPriceSnapshotParams = {
   readonly ticker: string
 }
 
-export const getHistoricalPrices = (apiKey: string, params: HistoricalPricesParams) =>
-  requestJson("/prices", {
+export const getCryptoHistoricalPrices = (apiKey: string, params: CryptoHistoricalPricesParams) =>
+  requestJson("/crypto/prices", {
     apiKey,
     query: {
       ticker: params.ticker,
@@ -26,8 +26,8 @@ export const getHistoricalPrices = (apiKey: string, params: HistoricalPricesPara
     }
   })
 
-export const getPriceSnapshot = (apiKey: string, params: PriceSnapshotParams) =>
-  requestJson("/prices/snapshot", {
+export const getCryptoPriceSnapshot = (apiKey: string, params: CryptoPriceSnapshotParams) =>
+  requestJson("/crypto/prices/snapshot", {
     apiKey,
     query: {
       ticker: params.ticker

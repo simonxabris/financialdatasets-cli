@@ -1,6 +1,6 @@
 import { Command, Options } from "@effect/cli"
 import { Console, Effect, Option } from "effect"
-import { getHistoricalPrices, getPriceSnapshot } from "../api/prices"
+import { getCryptoHistoricalPrices, getCryptoPriceSnapshot } from "../api/crypto"
 import { isApiError } from "../api/client"
 
 const datePattern = /^\d{4}-\d{2}-\d{2}$/
@@ -39,7 +39,7 @@ const formatError = (error: unknown): string => {
 }
 
 const ticker = Options.text("ticker").pipe(
-  Options.withDescription("The ticker symbol."),
+  Options.withDescription("The cryptocurrency ticker symbol."),
   Options.withPseudoName("string")
 )
 
@@ -89,7 +89,7 @@ const historical = Command.make(
       })
 
       const response = yield*
-        getHistoricalPrices(apiKey, {
+        getCryptoHistoricalPrices(apiKey, {
           ticker,
           interval,
           intervalMultiplier,
@@ -121,7 +121,7 @@ const snapshot = Command.make(
         return value
       })
 
-      const response = yield* getPriceSnapshot(apiKey, { ticker })
+      const response = yield* getCryptoPriceSnapshot(apiKey, { ticker })
 
       yield* Console.log(JSON.stringify(response))
     }).pipe(
@@ -131,6 +131,6 @@ const snapshot = Command.make(
     )
 )
 
-export const pricesCommand = Command.make("prices", {}, () => Effect.succeed(undefined)).pipe(
+export const cryptoCommand = Command.make("crypto", {}, () => Effect.succeed(undefined)).pipe(
   Command.withSubcommands([historical, snapshot])
 )
