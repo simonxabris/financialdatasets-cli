@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { Command, ValidationError } from "@effect/cli"
 import { NodeContext, NodeRuntime } from "@effect/platform-node"
 import { Effect } from "effect"
@@ -12,11 +13,6 @@ import { insiderTradesCommand } from "./commands/insiderTrades"
 import { institutionalOwnershipCommand } from "./commands/institutionalOwnership"
 import { financialMetricsCommand } from "./commands/financialMetrics"
 import { formatError } from "./commands/shared"
-
-if (!process.env.FINANCIAL_DATASETS_API_KEY) {
-  console.error("Missing FINANCIAL_DATASETS_API_KEY in environment.")
-  process.exit(1)
-}
 
 const command = Command.make("financialdatasets", {}, () => Effect.succeed(undefined)).pipe(
   Command.withSubcommands([

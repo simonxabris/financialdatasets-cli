@@ -1,23 +1,48 @@
 {
-  "name": "financialdatasets-cli",
-  "module": "index.ts",
+  "name": "@simonxabris/financialdatasets-cli",
+  "version": "0.0.1",
+  "description": "CLI for Financial Datasets API - command-line interface for accessing financial market data",
+  "keywords": ["cli", "finance", "stocks", "api", "financial-datasets", "market-data", "crypto", "earnings"],
+  "author": "Abris Simon <abris96@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/simonxabris/financialdatasets-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/simonxabris/financialdatasets-cli/issues"
+  },
+  "homepage": "https://github.com/simonxabris/financialdatasets-cli#readme",
+  "bin": {
+    "financialdatasets": "./dist/index.js"
+  },
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "type": "module",
-  "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --target node && chmod +x ./dist/index.js",
+    "build:single": "bun build ./src/index.ts --outfile ./dist/index.js --target node --format esm && chmod +x ./dist/index.js",
+    "prepublishOnly": "bun run build:single",
+    "prepare": "bun run build:single",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix"
   },
   "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
+    "@types/bun": "latest",
     "typescript": "^5"
   },
   "dependencies": {
     "@effect/cli": "^0.73.1",
     "@effect/platform-node": "^0.104.1",
-    "effect": "^3.19.15",
-    "oxlint": "^1.42.0"
+    "effect": "^3.19.15"
   }
 }

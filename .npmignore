@@ -1,0 +1,47 @@
+# Source files
+src/
+
+# Development files
+docs/
+*.md
+!README.md
+!LICENSE
+
+# Configuration files
+tsconfig.json
+bun.lock
+.gitignore
+
+# Development dependencies and logs
+node_modules/
+npm-debug.log*
+.npm
+.env
+.env.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build files (except dist/)
+dist/*.map
+
+# Test files
+*.test.ts
+*.spec.ts
+tests/
+coverage/
+
+# CI/CD
+.github/
+.ci/
+
+# Documentation generation
+typedoc.json
+api-docs/
+
+# OpenAPI schema (if large)
+fincnacialdatesets-openapi-schema.json
