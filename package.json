@@ -1,0 +1,23 @@
+{
+  "name": "financialdatasets-cli",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@effect/cli": "^0.73.1",
+    "@effect/platform-node": "^0.104.1",
+    "effect": "^3.19.15",
+    "oxlint": "^1.42.0"
+  }
+}
