@@ -82,11 +82,12 @@ const cashFlowStatements = Command.make(
     })
 )
 
-const financialsBase = Command.make("financials", {}, () => Effect.succeed(undefined))
-const financialsWithSubcommands = financialsBase.pipe(
+let financialsWithSubcommands: Command.Command<string, unknown, unknown, unknown>
+const financialsBase = Command.make("financials", {}, () => Effect.succeed(undefined)).pipe(
+  Command.withHandler(() => printSubcommandHelp(financialsWithSubcommands))
+)
+financialsWithSubcommands = financialsBase.pipe(
   Command.withSubcommands([all, incomeStatements, balanceSheets, cashFlowStatements])
 )
 
-export const financialsCommand = financialsWithSubcommands.pipe(
-  Command.withHandler(() => printSubcommandHelp(financialsWithSubcommands))
-)
+export const financialsCommand = financialsWithSubcommands

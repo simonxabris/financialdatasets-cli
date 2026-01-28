@@ -104,9 +104,10 @@ const items = Command.make(
     })
 )
 
-const filingsBase = Command.make("filings", {}, () => Effect.succeed(undefined))
-const filingsWithSubcommands = filingsBase.pipe(Command.withSubcommands([list, items]))
-
-export const filingsCommand = filingsWithSubcommands.pipe(
+let filingsWithSubcommands: Command.Command<string, unknown, unknown, unknown>
+const filingsBase = Command.make("filings", {}, () => Effect.succeed(undefined)).pipe(
   Command.withHandler(() => printSubcommandHelp(filingsWithSubcommands))
 )
+filingsWithSubcommands = filingsBase.pipe(Command.withSubcommands([list, items]))
+
+export const filingsCommand = filingsWithSubcommands

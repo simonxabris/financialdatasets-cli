@@ -72,9 +72,10 @@ const snapshot = Command.make(
     })
 )
 
-const cryptoBase = Command.make("crypto", {}, () => Effect.succeed(undefined))
-const cryptoWithSubcommands = cryptoBase.pipe(Command.withSubcommands([historical, snapshot]))
-
-export const cryptoCommand = cryptoWithSubcommands.pipe(
+let cryptoWithSubcommands: Command.Command<string, unknown, unknown, unknown>
+const cryptoBase = Command.make("crypto", {}, () => Effect.succeed(undefined)).pipe(
   Command.withHandler(() => printSubcommandHelp(cryptoWithSubcommands))
 )
+cryptoWithSubcommands = cryptoBase.pipe(Command.withSubcommands([historical, snapshot]))
+
+export const cryptoCommand = cryptoWithSubcommands

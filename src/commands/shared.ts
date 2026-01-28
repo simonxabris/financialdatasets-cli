@@ -38,14 +38,17 @@ export const formatError = (error: unknown): string => {
 }
 
 export const getApiKey = () =>
-  Effect.sync(() => {
-    const value = process.env.FINANCIAL_DATASETS_API_KEY
+  Effect.try({
+    try: () => {
+      const value = process.env.FINANCIAL_DATASETS_API_KEY
 
-    if (!value) {
-      throw new Error("Missing FINANCIAL_DATASETS_API_KEY in environment.")
-    }
+      if (!value) {
+        throw new Error("Missing FINANCIAL_DATASETS_API_KEY in environment.")
+      }
 
-    return value
+      return value
+    },
+    catch: (error) => (error instanceof Error ? error : new Error(String(error)))
   })
 
 export const printSubcommandHelp = <Name extends string, R, E, A>(

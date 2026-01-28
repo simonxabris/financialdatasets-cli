@@ -32,9 +32,10 @@ const facts = Command.make(
     })
 )
 
-const companyBase = Command.make("company", {}, () => Effect.succeed(undefined))
-const companyWithSubcommands = companyBase.pipe(Command.withSubcommands([facts]))
-
-export const companyCommand = companyWithSubcommands.pipe(
+let companyWithSubcommands: Command.Command<string, unknown, unknown, unknown>
+const companyBase = Command.make("company", {}, () => Effect.succeed(undefined)).pipe(
   Command.withHandler(() => printSubcommandHelp(companyWithSubcommands))
 )
+companyWithSubcommands = companyBase.pipe(Command.withSubcommands([facts]))
+
+export const companyCommand = companyWithSubcommands

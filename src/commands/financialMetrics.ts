@@ -45,11 +45,12 @@ const snapshot = Command.make(
     })
 )
 
-const financialMetricsBase = Command.make("financial-metrics", {}, () => Effect.succeed(undefined))
-const financialMetricsWithSubcommands = financialMetricsBase.pipe(
+let financialMetricsWithSubcommands: Command.Command<string, unknown, unknown, unknown>
+const financialMetricsBase = Command.make("financial-metrics", {}, () => Effect.succeed(undefined)).pipe(
+  Command.withHandler(() => printSubcommandHelp(financialMetricsWithSubcommands))
+)
+financialMetricsWithSubcommands = financialMetricsBase.pipe(
   Command.withSubcommands([historical, snapshot])
 )
 
-export const financialMetricsCommand = financialMetricsWithSubcommands.pipe(
-  Command.withHandler(() => printSubcommandHelp(financialMetricsWithSubcommands))
-)
+export const financialMetricsCommand = financialMetricsWithSubcommands

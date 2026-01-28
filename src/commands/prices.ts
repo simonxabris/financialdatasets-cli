@@ -72,9 +72,10 @@ const snapshot = Command.make(
     })
 )
 
-const pricesBase = Command.make("prices", {}, () => Effect.succeed(undefined))
-const pricesWithSubcommands = pricesBase.pipe(Command.withSubcommands([historical, snapshot]))
-
-export const pricesCommand = pricesWithSubcommands.pipe(
+let pricesWithSubcommands: Command.Command<string, unknown, unknown, unknown>
+const pricesBase = Command.make("prices", {}, () => Effect.succeed(undefined)).pipe(
   Command.withHandler(() => printSubcommandHelp(pricesWithSubcommands))
 )
+pricesWithSubcommands = pricesBase.pipe(Command.withSubcommands([historical, snapshot]))
+
+export const pricesCommand = pricesWithSubcommands

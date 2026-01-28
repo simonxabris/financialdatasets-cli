@@ -10,13 +10,9 @@ npm install -g @simonxabris/financialdatasets-cli
 
 ## Setup
 
-Set your Financial Datasets API key as an environment variable:
-
-```bash
-export FINANCIAL_DATASETS_API_KEY="your_api_key_here"
-```
-
 Get an API key at [financialdatasets.ai](https://financialdatasets.ai).
+
+Make sure it's available in the environment as `FINANCIAL_DATASETS_API_KEY`
 
 ## Usage
 
@@ -123,10 +119,6 @@ All commands return raw JSON responses from the API.
 
 - Node.js >= 18.0.0
 - FINANCIAL_DATASETS_API_KEY environment variable
-
-## License
-
-MIT © Abris Simon
 
 ## Links
 

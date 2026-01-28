@@ -13,6 +13,7 @@ import { insiderTradesCommand } from "./commands/insiderTrades"
 import { institutionalOwnershipCommand } from "./commands/institutionalOwnership"
 import { financialMetricsCommand } from "./commands/financialMetrics"
 import { formatError } from "./commands/shared"
+import packageJson from "../package.json" assert { type: "json" }
 
 const command = Command.make("financialdatasets", {}, () => Effect.succeed(undefined)).pipe(
   Command.withSubcommands([
@@ -31,7 +32,7 @@ const command = Command.make("financialdatasets", {}, () => Effect.succeed(undef
 
 const cli = Command.run(command, {
   name: "Financial Datasets CLI",
-  version: "0.0.0"
+  version: packageJson.version
 })
 
 const program = cli(process.argv).pipe(

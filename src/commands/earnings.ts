@@ -21,9 +21,10 @@ const pressReleases = Command.make(
     })
 )
 
-const earningsBase = Command.make("earnings", {}, () => Effect.succeed(undefined))
-const earningsWithSubcommands = earningsBase.pipe(Command.withSubcommands([pressReleases]))
-
-export const earningsCommand = earningsWithSubcommands.pipe(
+let earningsWithSubcommands: Command.Command<string, unknown, unknown, unknown>
+const earningsBase = Command.make("earnings", {}, () => Effect.succeed(undefined)).pipe(
   Command.withHandler(() => printSubcommandHelp(earningsWithSubcommands))
 )
+earningsWithSubcommands = earningsBase.pipe(Command.withSubcommands([pressReleases]))
+
+export const earningsCommand = earningsWithSubcommands
