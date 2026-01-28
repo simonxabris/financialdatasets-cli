@@ -5,7 +5,14 @@ A command-line interface for the [Financial Datasets API](https://financialdatas
 ## Installation
 
 ```bash
+# npm
 npm install -g @simonxabris/financialdatasets-cli
+
+# pnpm
+pnpm add -g @simonxabris/financialdatasets-cli
+
+# bun
+bun add -g @simonxabris/financialdatasets-cli
 ```
 
 ## Setup
