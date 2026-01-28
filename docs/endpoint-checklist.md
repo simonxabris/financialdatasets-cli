@@ -5,20 +5,16 @@ Source: `fincnacialdatesets-openapi-schema.json`
 ## Market Data
 - [x] `GET /prices` (prices historical)
 - [x] `GET /prices/snapshot`
-- [ ] `GET /options`
-- [ ] `GET /options/chain`
 
 ## Crypto
 - [x] `GET /crypto/prices`
 - [x] `GET /crypto/prices/snapshot`
 
 ## Financial Statements
-- [ ] `GET /financials`
-- [ ] `GET /financials/income-statements`
-- [ ] `GET /financials/balance-sheets`
-- [ ] `GET /financials/cash-flow-statements`
-- [ ] `POST /financials/search`
-- [ ] `POST /financials/search/line-items`
+- [x] `GET /financials`
+- [x] `GET /financials/income-statements`
+- [x] `GET /financials/balance-sheets`
+- [x] `GET /financials/cash-flow-statements`
 
 ## Company Information
 - [x] `GET /company/facts`
@@ -27,18 +23,18 @@ Source: `fincnacialdatesets-openapi-schema.json`
 - [x] `GET /earnings/press-releases`
 
 ## News
-- [ ] `GET /news`
+- [x] `GET /news`
 
 ## SEC Filings
-- [ ] `GET /filings`
-- [ ] `GET /filings/items`
+- [x] `GET /filings`
+- [x] `GET /filings/items`
 
 ## Insider Trades
-- [ ] `GET /insider-trades`
+- [x] `GET /insider-trades`
 
 ## Institutional Ownership
-- [ ] `GET /institutional-ownership`
+- [x] `GET /institutional-ownership`
 
 ## Financial Metrics
-- [ ] `GET /financial-metrics`
-- [ ] `GET /financial-metrics/snapshot`
+- [x] `GET /financial-metrics`
+- [x] `GET /financial-metrics/snapshot`

@@ -71,3 +71,8 @@ export const requestJson = (path: string, options: { apiKey: string; query?: Rec
     },
     catch: toError
   })
+
+export const buildQuery = (params: Record<string, string | number | undefined>) =>
+  Object.fromEntries(
+    Object.entries(params).filter(([, value]) => value !== undefined)
+  ) as Record<string, string | number>

@@ -1,4 +1,4 @@
-import { requestJson } from "./client"
+import { buildQuery, requestJson } from "./client"
 
 export type CompanyFactsParams = {
   readonly ticker?: string
@@ -8,10 +8,8 @@ export type CompanyFactsParams = {
 export const getCompanyFacts = (apiKey: string, params: CompanyFactsParams) =>
   requestJson("/company/facts", {
     apiKey,
-    query: Object.fromEntries(
-      Object.entries({
-        ticker: params.ticker,
-        cik: params.cik
-      }).filter(([, value]) => value !== undefined)
-    ) as Record<string, string | number>
+    query: buildQuery({
+      ticker: params.ticker,
+      cik: params.cik
+    })
   })

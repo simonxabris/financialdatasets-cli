@@ -1,42 +1,7 @@
 import { Command, Options } from "@effect/cli"
-import { Console, Effect, Option } from "effect"
+import { Console, Effect } from "effect"
 import { getCryptoHistoricalPrices, getCryptoPriceSnapshot } from "../api/crypto"
-import { isApiError } from "../api/client"
-
-const datePattern = /^\d{4}-\d{2}-\d{2}$/
-
-const ensureDate = (value: string) =>
-  datePattern.test(value)
-    ? Option.some(value)
-    : Option.none()
-
-const ensureMin = (value: number, min: number) =>
-  value >= min ? Option.some(value) : Option.none()
-
-const ensureRange = (value: number, min: number, max: number) =>
-  value >= min && value <= max ? Option.some(value) : Option.none()
-
-const formatError = (error: unknown): string => {
-  if (isApiError(error)) {
-    const parts = [`Request failed (${error.status})`]
-
-    if (error.error) {
-      parts.push(error.error)
-    }
-
-    if (error.message) {
-      parts.push(error.message)
-    }
-
-    return parts.join(": ")
-  }
-
-  if (error instanceof Error) {
-    return error.message
-  }
-
-  return String(error)
-}
+import { ensureDate, ensureMin, ensureRange, formatError, getApiKey } from "./shared"
 
 const ticker = Options.text("ticker").pipe(
   Options.withDescription("The cryptocurrency ticker symbol."),
@@ -78,15 +43,7 @@ const historical = Command.make(
   { ticker, interval, intervalMultiplier, startDate, endDate, limit },
   ({ ticker, interval, intervalMultiplier, startDate, endDate, limit }) =>
     Effect.gen(function*() {
-      const apiKey = yield* Effect.sync(() => {
-        const value = process.env.FINANCIAL_DATASETS_API_KEY
-
-        if (!value) {
-          throw new Error("Missing FINANCIAL_DATASETS_API_KEY in environment.")
-        }
-
-        return value
-      })
+      const apiKey = yield* getApiKey()
 
       const response = yield*
         getCryptoHistoricalPrices(apiKey, {
@@ -111,15 +68,7 @@ const snapshot = Command.make(
   { ticker },
   ({ ticker }) =>
     Effect.gen(function*() {
-      const apiKey = yield* Effect.sync(() => {
-        const value = process.env.FINANCIAL_DATASETS_API_KEY
-
-        if (!value) {
-          throw new Error("Missing FINANCIAL_DATASETS_API_KEY in environment.")
-        }
-
-        return value
-      })
+      const apiKey = yield* getApiKey()
 
       const response = yield* getCryptoPriceSnapshot(apiKey, { ticker })
 
