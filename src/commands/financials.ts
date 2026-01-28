@@ -10,7 +10,8 @@ import { getApiKey, printSubcommandHelp } from "./shared"
 
 const ticker = Options.text("ticker").pipe(
   Options.withDescription("The ticker symbol."),
-  Options.withPseudoName("string")
+  Options.withPseudoName("string"),
+  Options.withDefault(undefined)
 )
 
 const period = Options.choice("period", ["annual", "quarterly", "ttm"] as const).pipe(
@@ -30,14 +31,27 @@ const cik = Options.text("cik").pipe(
   Options.withDefault(undefined)
 )
 
+const resolveTickerOrCik = (tickerValue: string | undefined, cikValue: string | undefined) => {
+  if (tickerValue && cikValue) {
+    return Effect.fail(new Error("Provide either --ticker or --cik, not both."))
+  }
+
+  if (!tickerValue && !cikValue) {
+    return Effect.fail(new Error("Missing required --ticker or --cik."))
+  }
+
+  return Effect.succeed({ ticker: tickerValue, cik: cikValue })
+}
+
 const all = Command.make(
   "all",
   { ticker, period, limit, cik },
   ({ ticker, period, limit, cik }) =>
     Effect.gen(function*() {
       const apiKey = yield* getApiKey()
+      const { ticker: resolvedTicker, cik: resolvedCik } = yield* resolveTickerOrCik(ticker, cik)
 
-      const response = yield* getFinancials(apiKey, { ticker, period, limit, cik })
+      const response = yield* getFinancials(apiKey, { ticker: resolvedTicker, period, limit, cik: resolvedCik })
 
       yield* Console.log(JSON.stringify(response))
     })
@@ -49,8 +63,14 @@ const incomeStatements = Command.make(
   ({ ticker, period, limit, cik }) =>
     Effect.gen(function*() {
       const apiKey = yield* getApiKey()
+      const { ticker: resolvedTicker, cik: resolvedCik } = yield* resolveTickerOrCik(ticker, cik)
 
-      const response = yield* getIncomeStatements(apiKey, { ticker, period, limit, cik })
+      const response = yield* getIncomeStatements(apiKey, {
+        ticker: resolvedTicker,
+        period,
+        limit,
+        cik: resolvedCik
+      })
 
       yield* Console.log(JSON.stringify(response))
     })
@@ -62,8 +82,14 @@ const balanceSheets = Command.make(
   ({ ticker, period, limit, cik }) =>
     Effect.gen(function*() {
       const apiKey = yield* getApiKey()
+      const { ticker: resolvedTicker, cik: resolvedCik } = yield* resolveTickerOrCik(ticker, cik)
 
-      const response = yield* getBalanceSheets(apiKey, { ticker, period, limit, cik })
+      const response = yield* getBalanceSheets(apiKey, {
+        ticker: resolvedTicker,
+        period,
+        limit,
+        cik: resolvedCik
+      })
 
       yield* Console.log(JSON.stringify(response))
     })
@@ -75,8 +101,14 @@ const cashFlowStatements = Command.make(
   ({ ticker, period, limit, cik }) =>
     Effect.gen(function*() {
       const apiKey = yield* getApiKey()
+      const { ticker: resolvedTicker, cik: resolvedCik } = yield* resolveTickerOrCik(ticker, cik)
 
-      const response = yield* getCashFlowStatements(apiKey, { ticker, period, limit, cik })
+      const response = yield* getCashFlowStatements(apiKey, {
+        ticker: resolvedTicker,
+        period,
+        limit,
+        cik: resolvedCik
+      })
 
       yield* Console.log(JSON.stringify(response))
     })
