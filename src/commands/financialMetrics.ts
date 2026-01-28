@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli"
 import { Console, Effect } from "effect"
 import { getFinancialMetrics, getFinancialMetricsSnapshot } from "../api/financialMetrics"
-import { formatError, getApiKey } from "./shared"
+import { getApiKey } from "./shared"
 
 const ticker = Options.text("ticker").pipe(
   Options.withDescription("The ticker symbol of the company."),
@@ -29,11 +29,7 @@ const historical = Command.make(
       const response = yield* getFinancialMetrics(apiKey, { ticker, period, limit })
 
       yield* Console.log(JSON.stringify(response))
-    }).pipe(
-      Effect.catchAll((error) =>
-        Console.error(formatError(error)).pipe(Effect.andThen(Effect.fail(error)))
-      )
-    )
+    })
 )
 
 const snapshot = Command.make(
@@ -46,11 +42,7 @@ const snapshot = Command.make(
       const response = yield* getFinancialMetricsSnapshot(apiKey, { ticker })
 
       yield* Console.log(JSON.stringify(response))
-    }).pipe(
-      Effect.catchAll((error) =>
-        Console.error(formatError(error)).pipe(Effect.andThen(Effect.fail(error)))
-      )
-    )
+    })
 )
 
 export const financialMetricsCommand = Command.make(

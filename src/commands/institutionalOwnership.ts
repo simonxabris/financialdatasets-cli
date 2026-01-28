@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli"
 import { Console, Effect } from "effect"
 import { getInstitutionalOwnership } from "../api/institutionalOwnership"
-import { formatError, getApiKey } from "./shared"
+import { getApiKey } from "./shared"
 
 const investor = Options.text("investor").pipe(
   Options.withDescription("The name of the investment manager."),
@@ -39,9 +39,5 @@ export const institutionalOwnershipCommand = Command.make(
       const response = yield* getInstitutionalOwnership(apiKey, { investor, ticker, limit })
 
       yield* Console.log(JSON.stringify(response))
-    }).pipe(
-      Effect.catchAll((error) =>
-        Console.error(formatError(error)).pipe(Effect.andThen(Effect.fail(error)))
-      )
-    )
+    })
 )

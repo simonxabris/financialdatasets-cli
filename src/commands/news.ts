@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli"
 import { Console, Effect } from "effect"
 import { getNews } from "../api/news"
-import { ensureDate, ensureRange, formatError, getApiKey } from "./shared"
+import { ensureDate, ensureRange, getApiKey } from "./shared"
 
 const ticker = Options.text("ticker").pipe(
   Options.withDescription("The ticker symbol."),
@@ -39,9 +39,5 @@ export const newsCommand = Command.make(
       const response = yield* getNews(apiKey, { ticker, startDate, endDate, limit })
 
       yield* Console.log(JSON.stringify(response))
-    }).pipe(
-      Effect.catchAll((error) =>
-        Console.error(formatError(error)).pipe(Effect.andThen(Effect.fail(error)))
-      )
-    )
+    })
 )

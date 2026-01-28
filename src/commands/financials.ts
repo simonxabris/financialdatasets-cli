@@ -6,7 +6,7 @@ import {
   getFinancials,
   getIncomeStatements
 } from "../api/financials"
-import { formatError, getApiKey } from "./shared"
+import { getApiKey } from "./shared"
 
 const ticker = Options.text("ticker").pipe(
   Options.withDescription("The ticker symbol."),
@@ -40,11 +40,7 @@ const all = Command.make(
       const response = yield* getFinancials(apiKey, { ticker, period, limit, cik })
 
       yield* Console.log(JSON.stringify(response))
-    }).pipe(
-      Effect.catchAll((error) =>
-        Console.error(formatError(error)).pipe(Effect.andThen(Effect.fail(error)))
-      )
-    )
+    })
 )
 
 const incomeStatements = Command.make(
@@ -57,11 +53,7 @@ const incomeStatements = Command.make(
       const response = yield* getIncomeStatements(apiKey, { ticker, period, limit, cik })
 
       yield* Console.log(JSON.stringify(response))
-    }).pipe(
-      Effect.catchAll((error) =>
-        Console.error(formatError(error)).pipe(Effect.andThen(Effect.fail(error)))
-      )
-    )
+    })
 )
 
 const balanceSheets = Command.make(
@@ -74,11 +66,7 @@ const balanceSheets = Command.make(
       const response = yield* getBalanceSheets(apiKey, { ticker, period, limit, cik })
 
       yield* Console.log(JSON.stringify(response))
-    }).pipe(
-      Effect.catchAll((error) =>
-        Console.error(formatError(error)).pipe(Effect.andThen(Effect.fail(error)))
-      )
-    )
+    })
 )
 
 const cashFlowStatements = Command.make(
@@ -91,11 +79,7 @@ const cashFlowStatements = Command.make(
       const response = yield* getCashFlowStatements(apiKey, { ticker, period, limit, cik })
 
       yield* Console.log(JSON.stringify(response))
-    }).pipe(
-      Effect.catchAll((error) =>
-        Console.error(formatError(error)).pipe(Effect.andThen(Effect.fail(error)))
-      )
-    )
+    })
 )
 
 export const financialsCommand = Command.make("financials", {}, () => Effect.succeed(undefined)).pipe(

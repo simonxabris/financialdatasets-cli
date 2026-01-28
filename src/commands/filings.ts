@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli"
 import { Console, Effect } from "effect"
 import { getFilingItems, getFilings } from "../api/filings"
-import { formatError, getApiKey } from "./shared"
+import { getApiKey } from "./shared"
 
 const cik = Options.text("cik").pipe(
   Options.withDescription("The Central Index Key (CIK) of the company."),
@@ -82,11 +82,7 @@ const list = Command.make(
       const response = yield* getFilings(apiKey, { cik, ticker, filingType })
 
       yield* Console.log(JSON.stringify(response))
-    }).pipe(
-      Effect.catchAll((error) =>
-        Console.error(formatError(error)).pipe(Effect.andThen(Effect.fail(error)))
-      )
-    )
+    })
 )
 
 const items = Command.make(
@@ -105,11 +101,7 @@ const items = Command.make(
       })
 
       yield* Console.log(JSON.stringify(response))
-    }).pipe(
-      Effect.catchAll((error) =>
-        Console.error(formatError(error)).pipe(Effect.andThen(Effect.fail(error)))
-      )
-    )
+    })
 )
 
 export const filingsCommand = Command.make("filings", {}, () => Effect.succeed(undefined)).pipe(

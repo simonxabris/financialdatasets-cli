@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli"
 import { Console, Effect } from "effect"
 import { getCompanyFacts } from "../api/company"
-import { formatError, getApiKey } from "./shared"
+import { getApiKey } from "./shared"
 
 const ticker = Options.text("ticker").pipe(
   Options.withDescription("The ticker symbol."),
@@ -29,11 +29,7 @@ const facts = Command.make(
       const response = yield* getCompanyFacts(apiKey, { ticker, cik })
 
       yield* Console.log(JSON.stringify(response))
-    }).pipe(
-      Effect.catchAll((error) =>
-        Console.error(formatError(error)).pipe(Effect.andThen(Effect.fail(error)))
-      )
-    )
+    })
 )
 
 export const companyCommand = Command.make("company", {}, () => Effect.succeed(undefined)).pipe(
